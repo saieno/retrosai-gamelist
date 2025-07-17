@@ -45,6 +45,15 @@ function displayGames() {
     });
 }
 
+// Twitch extension initialization
+window.Twitch.ext.onAuthorized((auth) => {
+  console.log("Twitch extension authorized:", auth);
+});
+
+// Adjust CSS for transparent Twitch Overlay
+document.body.style.background = "transparent";
+document.body.style.color = "white";
+
 document.getElementById('search').addEventListener('input', displayGames);
 document.getElementById('platform').addEventListener('change', displayGames);
 
