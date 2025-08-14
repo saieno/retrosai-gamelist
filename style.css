@@ -21,6 +21,13 @@ input, select {
     box-sizing: border-box;
 }
 
+.igdb-link {
+  color: #8ec8ff;
+  text-decoration: none;
+}
+.igdb-link:hover {
+  text-decoration: underline;
+}
 .game-item {
     padding: 8px;
     border-bottom: 1px solid #333;
