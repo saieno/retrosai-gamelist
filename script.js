@@ -217,22 +217,23 @@ function makeGameRow(platform, title) {
   a.rel = "noopener";
   a.textContent = title;
 
+  // Copy NAME only
   const copyBtn = document.createElement("button");
   copyBtn.className = "icon-btn";
-  copyBtn.title = "Copy link";
-  copyBtn.innerHTML = `<span class="icon">🔗</span>`;
+  copyBtn.title = "Copy name";
+  copyBtn.innerHTML = `<span class="icon">📝</span>`;
   copyBtn.addEventListener("click", async (e) => {
     e.preventDefault();
     e.stopPropagation();
     try {
-      await navigator.clipboard.writeText(a.href);
+      await navigator.clipboard.writeText(title);
       flash(copyBtn);
     } catch {
-      // fallback: open prompt
-      window.prompt("Copy URL", a.href);
+      window.prompt("Copy game name:", title);
     }
   });
 
+  // Open on IGDB
   const openBtn = document.createElement("a");
   openBtn.className = "icon-btn";
   openBtn.title = "Open on IGDB";
