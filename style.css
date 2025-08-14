@@ -37,3 +37,33 @@ h1, h2 {
     border-bottom: 2px solid #6441a5;
     padding-bottom: 5px;
 }
+
+/* Hover preview for IGDB box art */
+.igdb-link {
+  position: relative;
+  color: #8ec8ff;
+  text-decoration: none;
+}
+.igdb-link:hover { text-decoration: underline; }
+
+.hover-card {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translate(12px, -50%);
+  background: #0e0e0e;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 6px;
+  width: 170px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+  z-index: 20;
+}
+.hover-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+}
+.igdb-link:hover .hover-card { display: block; }
