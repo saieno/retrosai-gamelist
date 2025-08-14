@@ -225,12 +225,8 @@ function makeGameRow(platform, title) {
   copyBtn.addEventListener("click", async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    try {
-      await navigator.clipboard.writeText(title);
-      flash(copyBtn);
-    } catch {
-      window.prompt("Copy game name:", title);
-    }
+    try { await navigator.clipboard.writeText(title); flash(copyBtn); }
+    catch { window.prompt("Copy game name:", title); }
   });
 
   // Open on IGDB
@@ -247,6 +243,7 @@ function makeGameRow(platform, title) {
   row.appendChild(openBtn);
   return row;
 }
+
 
 function flash(el) {
   const old = el.style.outline;
