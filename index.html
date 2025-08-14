@@ -15,6 +15,61 @@
         <div id="game-list"></div>
     </div>
 
-    <script src="script.js"></script>
+<script src="script.js"></script>
+<script>
+(function () {
+  // Optional: if you later add /igdb-covers.json (title->imageURL), we’ll use it.
+  let covers = {};
+  fetch('igdb-covers.json').then(r => r.ok ? r.json() : null).then(j => { if (j) covers = j; }).catch(() => {});
+
+  function addHoverCard(a) {
+    if (!a || a.classList.contains('igdb-link') === false) return;
+    if (a.querySelector('.hover-card')) return; // already added
+
+    const title = (a.textContent || '').trim();
+    const imgSrc =
+      covers[title] || covers[a.href] || ''; // works with either title or URL keys
+
+    const card = document.createElement('span');
+    card.className = 'hover-card';
+    card.innerHTML = imgSrc
+      ? `<img loading="lazy" alt="Box art for ${title}" src="${imgSrc}">`
+      : `<div style="font-size:12px;opacity:.85;padding:4px 6px">View on IGDB →</div>`;
+
+    a.appendChild(card);
+
+    // Basic mobile support: tap to toggle preview, second tap follows link
+    let shown = false;
+    a.addEventListener('touchstart', (e) => {
+      if (!shown) {
+        e.preventDefault();
+        card.style.display = 'block';
+        shown = true;
+        setTimeout(() => { shown = false; card.style.display = ''; }, 1200);
+      }
+    }, {passive:false});
+  }
+
+  function scan(root = document) {
+    root.querySelectorAll('a.igdb-link').forEach(addHoverCard);
+  }
+
+  // Catch links created dynamically by script.js
+  const mo = new MutationObserver((muts) => {
+    for (const m of muts) {
+      if (m.addedNodes) m.addedNodes.forEach(n => {
+        if (n.nodeType === 1) {
+          if (n.matches?.('a.igdb-link')) addHoverCard(n);
+          scan(n);
+        }
+      });
+    }
+  });
+  mo.observe(document.body, {childList: true, subtree: true});
+
+  // Initial pass
+  scan();
+})();
+</script>
 </body>
 </html>
