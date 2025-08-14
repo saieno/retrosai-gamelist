@@ -1,75 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Sai's Game Library</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RetroSai • Game List</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="container">
-        <h1>🎮 Sai's Game Library</h1>
-        <input type="text" id="search" placeholder="Search games...">
-        <select id="platform">
-            <option value="">All Platforms</option>
-        </select>
-        <div id="game-list"></div>
+  <header class="page-header">
+    <div class="header-inner">
+      <h1>RetroSai • Game List</h1>
+      <div id="results-meta" class="results-meta">Loading…</div>
     </div>
 
-<script src="script.js"></script>
-<script>
-(function () {
-  // Optional: if you later add /igdb-covers.json (title->imageURL), we’ll use it.
-  let covers = {};
-  fetch('igdb-covers.json').then(r => r.ok ? r.json() : null).then(j => { if (j) covers = j; }).catch(() => {});
+    <div class="toolbar">
+      <div class="tool">
+        <label for="search">Search</label>
+        <input id="search" type="search" placeholder="Type a title…" autocomplete="off" />
+      </div>
 
-  function addHoverCard(a) {
-    if (!a || a.classList.contains('igdb-link') === false) return;
-    if (a.querySelector('.hover-card')) return; // already added
+      <div class="tool">
+        <label for="platform">Platform</label>
+        <select id="platform">
+          <option value="">All (may be large)</option>
+        </select>
+      </div>
 
-    const title = (a.textContent || '').trim();
-    const imgSrc =
-      covers[title] || covers[a.href] || ''; // works with either title or URL keys
+      <div class="tool">
+        <label for="letter">A→Z</label>
+        <select id="letter">
+          <option value="">All</option>
+          <option>#</option>
+          <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
+          <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
+          <option>K</option><option>L</option><option>M</option><option>N</option><option>O</option>
+          <option>P</option><option>Q</option><option>R</option><option>S</option><option>T</option>
+          <option>U</option><option>V</option><option>W</option><option>X</option><option>Y</option>
+          <option>Z</option>
+        </select>
+      </div>
 
-    const card = document.createElement('span');
-    card.className = 'hover-card';
-    card.innerHTML = imgSrc
-      ? `<img loading="lazy" alt="Box art for ${title}" src="${imgSrc}">`
-      : `<div style="font-size:12px;opacity:.85;padding:4px 6px">View on IGDB →</div>`;
+      <div class="tool switches">
+        <button id="expandAll" class="btn">Expand all</button>
+        <button id="collapseAll" class="btn">Collapse all</button>
+        <button id="density" class="btn" data-mode="cozy">Compact</button>
+      </div>
+    </div>
+  </header>
 
-    a.appendChild(card);
+  <main id="game-list" class="content"></main>
 
-    // Basic mobile support: tap to toggle preview, second tap follows link
-    let shown = false;
-    a.addEventListener('touchstart', (e) => {
-      if (!shown) {
-        e.preventDefault();
-        card.style.display = 'block';
-        shown = true;
-        setTimeout(() => { shown = false; card.style.display = ''; }, 1200);
-      }
-    }, {passive:false});
-  }
+  <footer class="page-footer">
+    <small>Links open on IGDB. Tip: click the link icon to copy the URL.</small>
+  </footer>
 
-  function scan(root = document) {
-    root.querySelectorAll('a.igdb-link').forEach(addHoverCard);
-  }
-
-  // Catch links created dynamically by script.js
-  const mo = new MutationObserver((muts) => {
-    for (const m of muts) {
-      if (m.addedNodes) m.addedNodes.forEach(n => {
-        if (n.nodeType === 1) {
-          if (n.matches?.('a.igdb-link')) addHoverCard(n);
-          scan(n);
-        }
-      });
-    }
-  });
-  mo.observe(document.body, {childList: true, subtree: true});
-
-  // Initial pass
-  scan();
-})();
-</script>
+  <script src="script.js" defer></script>
 </body>
 </html>
